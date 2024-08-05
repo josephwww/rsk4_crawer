@@ -1,5 +1,6 @@
 from datetime import datetime, timedelta
 import pytz
+from enum import Enum
 
 TIME_FORMAT = "%Y-%m-%d %H:%M:%S"
 
@@ -36,13 +37,32 @@ PAGE_LIMIT = 200
 # 危包查验资质代码，用于未接单判断危化品
 HARZ_CERT = 'SJ1'
 
+
+class HarzFileType(Enum):
+    """
+    危化品文件类型
+    """
+    declaration = "80000001"
+    label = "80000003"
+    instruction = "80000004"
+
+
+class HarzFileName(Enum):
+    """
+    危化品单证命名规则
+    """
+    declaration = "declaration.pdf"
+    label = "label.pdf"
+    instruction = "instruction.pdf"
+
+
+# 危化品类型和文件名对应字典
 DOC_TYPE_DICT = {
-    "80000001": "declaration.pdf",
-    "80000003": "label.pdf",
-    "80000004": "instruction.pdf"
+    HarzFileType.declaration.value: HarzFileName.declaration.value,
+    HarzFileType.label.value: HarzFileName.label.value,
+    HarzFileType.instruction.value: HarzFileName.instruction.value
 }
 
-FORM_URL = BASE_URL.format(rest='GoodsWork/ManualWorkGoods/List/QueryList')
 
 # 货物人工查验接单列表
 ORDER_LIST_URL = BASE_URL.format(rest='GoodsWork/ManualWorkHead/List/QueryOrdersPage')
