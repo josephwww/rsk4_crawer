@@ -134,7 +134,8 @@ async def get_document_pdf(check_form_list):
 
             task = asyncio.create_task(upload_pdf_to_minio("sjdt-ocr", file_path, response.content))
             async_tasks.append(task)
-            save_mysql(entry_id=entry_id, g_no=g_no, flag='PENDING', file_name=filename)
+            save_mysql(entry_id=entry_id, g_no=g_no, flag='PENDING', file_name=filename,
+                       ddate=check_form['D_DATE'], create_time=check_form['CREATE_TIME'])
 
     # 等待所有上传minio结束
     await asyncio.gather(*async_tasks)

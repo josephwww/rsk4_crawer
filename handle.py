@@ -4,12 +4,18 @@ from config import session, HazardousPdfTask
 
 
 # 入库
-def save_mysql(entry_id, g_no, flag=None, file_name=None, ddate=None):
+def save_mysql(entry_id, g_no, flag=None, file_name=None, ddate=None, create_time=None) -> HazardousPdfTask:
     task = session.query(HazardousPdfTask).filter(HazardousPdfTask.entry_id==entry_id)\
         .filter(HazardousPdfTask.g_no == g_no).first()
 
     if not task:
-        task = HazardousPdfTask(id=str(uuid.uuid4()), entry_id=entry_id, g_no=g_no, ddate=ddate)
+        task = HazardousPdfTask(
+            id=str(uuid.uuid4()),
+            entry_id=entry_id,
+            g_no=g_no,
+            ddate=ddate,
+            create_time=create_time
+        )
         session.add(task)
         session.commit()
 
@@ -22,7 +28,7 @@ def save_mysql(entry_id, g_no, flag=None, file_name=None, ddate=None):
             task.instruction_status = flag
 
         session.commit()
-        return
+    return task
 
 
 def judge_is_exist(entry_id, g_no):
